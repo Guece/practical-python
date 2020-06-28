@@ -34,6 +34,20 @@ def read_portfolio_dict(filename):
 
     return portfolio
 
+def read_portfolio_dict_zip(filename):
+    portfolio = []
+    
+    with open(filename) as file:
+        rows = csv.reader(file)
+        headers = next(rows)
+
+        for rowno, row in enumerate(rows):
+            portfolio.append(dict(zip(headers, row)))
+            portfolio[rowno]["shares"] = int(portfolio[rowno]["shares"])
+            portfolio[rowno]["price"] = float(portfolio[rowno]["price"])
+
+    return portfolio
+
 def read_prices(filename):
     prices = {}
 

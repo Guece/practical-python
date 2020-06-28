@@ -75,4 +75,46 @@ def compute_gain(portfolioFile, priceFile):
         infoString = f"Es wurde ein Verlust von ${gain:0.2f} erzielt!"
 
     print(infoString)
+
+def print_report(report, header):
+    column_space = 15
+    spacer = "+"
+    spacer_unit = ""
+    seperator = ""
+
+    #Print Header
+    print(f"{header[0]:>{column_space}s} {header[1]:>{column_space}s} {header[2]:>{column_space}s} {header[3]:>{column_space}s}")
+
+    #Build Spacer unit
+    for i in range(column_space):
+        spacer_unit = spacer_unit + spacer
+    
+    #Build Seperator 
+    for column in header:
+        seperator = seperator + spacer_unit + " "
+    
+    print(seperator)
+    
+    for name, shares, price, change in report:
+        pricePrint = "$"+ f"{price:.2f}"
+        print(f"{name:>{column_space}s} {shares:>{column_space}d} {pricePrint:>{column_space}s} {change:>{column_space}.2f}")
+
+def make_report(portfolio, prices):
+    report = []
+    
+    #Generate Report
+    for row in portfolio:
+        try:
+            change = float(prices[row["name"]]) - float(row["price"])
+            holding = (row["name"], int(row["shares"]), float(prices[row["name"]]), change)
+            report.append(holding)
+        except:
+            print("Error parsing row: ", "\"", row, "\"")
+
+    print_report(report, ("Name", "Shares", "Price", "Change"))
+
+    return report
+
+
+
 # Exercise 2.4
